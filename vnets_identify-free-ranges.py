@@ -18,13 +18,9 @@ with open('vnets.json') as json_file:
         }
         vNetToFreeSubnets.append(vNetInfos)
 
-        #TODO: Generalize to support multiple address prefixes.
-        if (len(addressPrefixes) == 1):
-            vNetRange = IPSet([addressPrefixes[0]])
-        else:
-            vNetRange = IPSet()
-            for prefix in addressPrefixes:
-                vNetRange.add(prefix)
+        vNetRange = IPSet()
+        for prefix in addressPrefixes:
+            vNetRange.add(prefix)
 
         subnetInfos = []
         subnets = properties['subnets']

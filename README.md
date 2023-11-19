@@ -23,11 +23,41 @@
 # Get VNet data
 - Get all subscription's VNets' metadata and save to `vnets.json` by running
   ```
-  ./vnets_get.sh
+  ./vnets_get-metadata.sh
   ```
 
 # Identify free ranges
 - Run the Python script based on [netaddr](https://netaddr.readthedocs.io/en/latest/index.html) to identfy free ranges and save them to `vnets_free-ranges.json` by running
   ```
   python3 ./vnets_identify-free-ranges.py
+  ```
+- See `vnets_free-ranges.json` to check for new ranges, it will contain free ranges per VNet:
+  ```json
+  [
+    {
+        "name": "vnet-name",
+        "id": "/subscriptions/.../resourceGroups/.../providers/Microsoft.Network/virtualNetworks/vnet-name",
+        "addressPrefixes": [
+            "10.0.0.0/16"
+        ],
+        "subnets": [
+            {
+                "name": "vmssAdoAgentSubnet",
+                "addressPrefix": "10.0.0.0/24"
+            },
+            {
+                "name": "test",
+                "addressPrefix": "10.0.1.0/24"
+            }
+        ],
+        "freeRanges": [
+            {
+                "addressPrefix": "10.0.2.0/23",
+                "size": 512
+            },
+            {
+                "addressPrefix": "10.0.4.0/22",
+                "size": 1024
+            },
+        ...
   ```
