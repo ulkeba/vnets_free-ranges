@@ -26,12 +26,21 @@ with open('vnets.json') as json_file:
         subnets = properties['subnets']
         for subnet in subnets:
             subnetProperties = subnet['properties']
-            addressPrefix = subnetProperties['addressPrefix']
-            subnetInfos.append({
+            subnetInfo = {
                 'name': subnet['name'],
-                'addressPrefix': addressPrefix
-            })
-            vNetRange.remove(addressPrefix)
+            }
+            subnetPrefixes = []
+            if not subnetProperties.get('addressPrefix') is None:
+                subnetPrefixes.append(subnetProperties['addressPrefix'])
+            elif not subnetProperties.get('addressPrefixes') is None:
+                subnetPrefixes.extend(subnetProperties['addressPrefixes'])
+            else:
+                print(f"ERROR: No addressPrefix or addressPrefixes found in subnet {subnet['name']}.")
+                exit(1)
+            for addressPrefix in subnetPrefixes:
+                vNetRange.remove(addressPrefix)
+            subnetInfo['addressPrefixes'] = subnetPrefixes
+            subnetInfos.append(subnetInfo)
         vNetInfos['subnets'] = subnetInfos
 
         freeRangeInfos = []
